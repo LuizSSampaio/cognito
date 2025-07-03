@@ -68,3 +68,71 @@ impl CommandRegistry {
         ))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::AppContext;
+
+    struct MockCommandHandler {
+        can_handle_result: bool,
+        execute_result: CommandResult,
+    }
+
+    #[async_trait]
+    impl CommandHandler for MockCommandHandler {
+        async fn execute(
+            &self,
+            _command: CommandType,
+            _context: &AppContext,
+        ) -> anyhow::Result<CommandResult> {
+            Ok(self.execute_result.clone())
+        }
+
+        fn can_handle(&self, _command: &CommandType) -> bool {
+            self.can_handle_result
+        }
+    }
+
+    async fn create_mock_context() -> AppContext {
+        AppContext::new().await.expect("Create AppContext mock")
+    }
+
+    #[tokio::test]
+    async fn test_command_registry_execute_success() {
+        let mut registry = CommandRegistry::default();
+        let handler = Box::new(MockCommandHandler {
+            can_handle_result: true,
+            execute_result: CommandResult::Success,
+        });
+
+        registry.register_handler("test_handler".to_string(), handler);
+
+        let command = CommandType::OpenFile {
+            path: "/test/file".to_string(),
+        };
+        let context = create_mock_context().await;
+
+        let result = registry.execute(command, &context).await;
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), CommandResult::Success);
+    }
+
+    #[tokio::test]
+    async fn test_command_registry_execute_no_handler() {
+        let registry = CommandRegistry::default();
+        let command = CommandType::OpenFile {
+            path: "/test/file".to_string(),
+        };
+        let context = create_mock_context().await;
+
+        let result = registry.execute(command, &context).await;
+        assert!(result.is_err());
+        assert!(
+            result
+                .unwrap_err()
+                .to_string()
+                .contains("No handler found for command")
+        );
+    }
+}

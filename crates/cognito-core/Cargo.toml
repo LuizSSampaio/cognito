@@ -7,4 +7,5 @@ edition = "2024"
 anyhow.workspace = true
 uuid.workspace = true
 serde.workspace = true
+tokio.workspace = true
 async-trait = "0.1.88"
