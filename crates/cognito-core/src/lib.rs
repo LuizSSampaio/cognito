@@ -1,14 +1,16 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use context::AppContext;
+
+mod context;
+
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+pub struct Core {
+    context: AppContext,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl Core {
+    pub async fn new() -> anyhow::Result<Self> {
+        let context = AppContext::new().await?;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        Ok(Self { context })
     }
 }
