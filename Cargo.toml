@@ -11,3 +11,4 @@ members = ["crates/*"]
 serde = { version = "1.0.219", features = ["derive"] }
 tokio = { version = "1.46.0", features = ["full"] }
 anyhow = "1.0.98"
+uuid = { version = "1.17.0", features = ["v4"] }
