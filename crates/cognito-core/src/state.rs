@@ -2,6 +2,8 @@ use std::collections::HashMap;
 
 use uuid::Uuid;
 
+use crate::commands::Action;
+
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct AppState {
     pub query: String,
@@ -23,6 +25,7 @@ pub struct SearchResult {
     pub subtitle: Option<String>,
     pub icon: Option<String>,
     pub score: f64,
+    pub actions: Vec<Action>,
     pub metadata: HashMap<String, String>,
 }
 

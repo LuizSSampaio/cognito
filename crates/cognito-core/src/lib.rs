@@ -1,5 +1,6 @@
 use context::AppContext;
 
+mod commands;
 mod context;
 mod state;
 
