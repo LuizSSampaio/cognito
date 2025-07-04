@@ -30,7 +30,7 @@ pub type EventSender = broadcast::Sender<AppEvent>;
 pub type EventReceiver = broadcast::Receiver<AppEvent>;
 
 #[derive(Debug, Clone)]
-pub(crate) struct EventBus {
+pub struct EventBus {
     sender: EventSender,
 }
 

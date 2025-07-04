@@ -5,7 +5,7 @@ use anyhow::Ok;
 use crate::{commands::CommandRegistry, config::ConfigManager, events::EventBus, state::AppState};
 
 #[derive(Clone)]
-pub(crate) struct AppContext {
+pub struct AppContext {
     pub state: Arc<RwLock<AppState>>,
     pub event_bus: EventBus,
     pub config: Arc<RwLock<ConfigManager>>,

@@ -5,7 +5,7 @@ use uuid::Uuid;
 use crate::commands::Action;
 
 #[derive(Debug, Clone, PartialEq)]
-pub(crate) struct AppState {
+pub struct AppState {
     pub query: String,
     pub results: Vec<SearchResult>,
     pub selected_index: usize,
@@ -13,7 +13,7 @@ pub(crate) struct AppState {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub(crate) enum AppMode {
+pub enum AppMode {
     Search,
     Command,
 }

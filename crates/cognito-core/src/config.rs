@@ -13,7 +13,7 @@ impl Default for AppConfig {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct ConfigManager {
+pub struct ConfigManager {
     config: AppConfig,
     config_path: PathBuf,
 }

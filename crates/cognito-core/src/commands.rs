@@ -42,7 +42,7 @@ pub enum CommandResult {
 }
 
 #[derive(Default)]
-pub(crate) struct CommandRegistry {
+pub struct CommandRegistry {
     handlers: HashMap<String, Box<dyn CommandHandler>>,
 }
 
@@ -95,7 +95,7 @@ mod tests {
     }
 
     async fn create_mock_context() -> AppContext {
-        AppContext::new().await.expect("Create AppContext mock")
+        AppContext::new().expect("Create AppContext mock")
     }
 
     #[tokio::test]
