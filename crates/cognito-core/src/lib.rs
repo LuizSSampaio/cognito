@@ -4,7 +4,7 @@ mod commands;
 mod context;
 mod state;
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[derive(Clone)]
 pub struct Core {
     context: AppContext,
 }

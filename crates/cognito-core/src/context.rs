@@ -1,10 +1,18 @@
+use std::sync::{Arc, RwLock};
+
 use anyhow::Ok;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub(crate) struct AppContext {}
+use crate::commands::CommandRegistry;
+
+#[derive(Clone)]
+pub(crate) struct AppContext {
+    pub command_registry: Arc<RwLock<CommandRegistry>>,
+}
 
 impl AppContext {
     pub async fn new() -> anyhow::Result<Self> {
-        Ok(Self {})
+        Ok(Self {
+            command_registry: Arc::new(RwLock::new(CommandRegistry::default())),
+        })
     }
 }
