@@ -1,6 +1,7 @@
 use context::AppContext;
 
 mod commands;
+mod config;
 mod context;
 mod events;
 mod state;
@@ -11,8 +12,8 @@ pub struct Core {
 }
 
 impl Core {
-    pub async fn new() -> anyhow::Result<Self> {
-        let context = AppContext::new().await?;
+    pub fn new() -> anyhow::Result<Self> {
+        let context = AppContext::new()?;
 
         Ok(Self { context })
     }
