@@ -2,6 +2,7 @@ use context::AppContext;
 
 mod commands;
 mod context;
+mod events;
 mod state;
 
 #[derive(Clone)]
