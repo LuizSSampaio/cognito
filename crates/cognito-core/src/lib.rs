@@ -4,7 +4,7 @@ use events::AppEvent;
 mod commands;
 mod config;
 mod context;
-mod events;
+pub mod events;
 mod state;
 
 #[derive(Clone)]
