@@ -6,6 +6,9 @@ fn main() -> iced::Result {
     iced::application("Cognito", Cognito::update, Cognito::view)
         .resizable(false)
         .decorations(false)
+        .centered()
+        .level(iced::window::Level::AlwaysOnTop)
+        .exit_on_close_request(false)
         .run()
 }
 
