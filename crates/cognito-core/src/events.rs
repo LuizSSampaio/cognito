@@ -44,8 +44,14 @@ impl EventBus {
         self.sender.subscribe()
     }
 
-    pub fn publish(&self, event: AppEvent) -> Result<(), broadcast::error::SendError<AppEvent>> {
-        self.sender.send(event).map(|_| ())
+    pub fn publish(
+        &self,
+        event: AppEvent,
+    ) -> Result<(), Box<broadcast::error::SendError<AppEvent>>> {
+        match self.sender.send(event) {
+            Ok(_) => Ok(()),
+            Err(e) => Err(Box::new(e)),
+        }
     }
 
     pub fn sender(&self) -> EventSender {
