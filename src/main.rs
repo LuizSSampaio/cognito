@@ -1,7 +1,10 @@
-use cognito_core::{self as core, Core};
 mod widget;
 
-use iced::widget::{Column, column, text};
+use cognito_core::{self as core, Core, events::AppEvent};
+
+use iced::widget::{Column, column};
+use log::error;
+use widget::search::search_bar;
 
 fn main() -> iced::Result {
     iced::application("Cognito", Cognito::update, Cognito::view)
@@ -25,9 +28,15 @@ impl Default for Cognito {
 }
 
 impl Cognito {
-    pub fn update(&mut self, _message: core::events::AppEvent) {}
+    pub fn update(&mut self, message: core::events::AppEvent) {
+        if let AppEvent::QueryChanged(new) = message {
+            if let Err(e) = self.core.context().handle_query(new) {
+                error!("Query handle failed: {e}");
+            }
+        }
+    }
 
     pub fn view(&self) -> Column<core::events::AppEvent> {
-        column![text("Hello World").size(50)]
+        column![search_bar(self.core.context().get_query(), None)]
     }
 }

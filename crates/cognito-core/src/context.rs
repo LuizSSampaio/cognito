@@ -1,7 +1,5 @@
 use std::sync::{Arc, RwLock};
 
-use anyhow::Ok;
-
 use crate::{commands::CommandRegistry, config::ConfigManager, events::EventBus, state::AppState};
 
 #[derive(Clone)]
@@ -20,6 +18,13 @@ impl AppContext {
             config: Arc::new(RwLock::new(ConfigManager::new()?)),
             command_registry: Arc::new(RwLock::new(CommandRegistry::default())),
         })
+    }
+
+    pub fn get_query(&self) -> String {
+        match self.state.read() {
+            Ok(state) => state.query.clone(),
+            Err(_) => String::new(),
+        }
     }
 
     pub fn handle_query(&self, query: String) -> anyhow::Result<()> {

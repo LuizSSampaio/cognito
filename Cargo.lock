@@ -531,6 +531,7 @@ dependencies = [
  "anyhow",
  "cognito-core",
  "iced",
+ "log",
 ]
 
 [[package]]
