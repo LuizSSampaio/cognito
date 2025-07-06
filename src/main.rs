@@ -1,4 +1,5 @@
 use cognito_core::{self as core, Core};
+mod widget;
 
 use iced::widget::{Column, column, text};
 
