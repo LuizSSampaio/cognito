@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use cognito_finder::item::Item;
 use uuid::Uuid;
 
 use crate::commands::Action;
@@ -36,6 +37,20 @@ impl Default for AppState {
             results: Default::default(),
             selected_index: Default::default(),
             mode: AppMode::Search,
+        }
+    }
+}
+
+impl From<Item> for SearchResult {
+    fn from(value: Item) -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            title: value.title,
+            subtitle: Some(value.path),
+            icon: None,
+            score: 1.0,
+            actions: Vec::new(),
+            metadata: HashMap::new(),
         }
     }
 }

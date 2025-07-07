@@ -5,7 +5,7 @@ use log::info;
 use nucleo::{Config, Nucleo};
 use walkdir::WalkDir;
 
-mod item;
+pub mod item;
 
 pub struct CognitoFinder {
     engine: Nucleo<Item>,
