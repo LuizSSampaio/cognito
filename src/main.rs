@@ -1,6 +1,6 @@
 mod widget;
 
-use cognito_core::{self as core, Core, events::AppEvent};
+use core::{Core, events::AppEvent};
 
 use iced::widget::{Column, column};
 use log::error;

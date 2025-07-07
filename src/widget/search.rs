@@ -1,4 +1,4 @@
-use cognito_core::events::AppEvent;
+use core::events::AppEvent;
 
 use iced::{Element, widget::text_input};
 

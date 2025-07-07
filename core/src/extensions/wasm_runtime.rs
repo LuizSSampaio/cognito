@@ -2,7 +2,7 @@ use std::{path::Path, sync::Arc};
 
 use async_trait::async_trait;
 use wasmtime::{
-    Engine, Instance, Store,
+    Engine, Store,
     component::{Component, Linker},
 };
 use wasmtime_wasi::{

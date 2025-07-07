@@ -4,17 +4,17 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-cognito-core.workspace = true
+core.workspace = true
 iced.workspace = true
 anyhow.workspace = true
 log.workspace = true
 
 [workspace]
 resolver = "2"
-members = ["crates/*"]
+members = ["core"]
 
 [workspace.dependencies]
-cognito-core.path = "./crates/cognito-core"
+core.path = "./core"
 
 serde = { version = "1.0.219", features = ["derive"] }
 tokio = { version = "1.46.0", features = ["full"] }

@@ -1,11 +1,9 @@
 [package]
-name = "cognito-core"
+name = "core"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-cognito-finder.path = "../cognito-finder"
-
 anyhow.workspace = true
 uuid.workspace = true
 serde.workspace = true
