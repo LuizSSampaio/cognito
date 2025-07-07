@@ -9,6 +9,8 @@ use crate::{
     events::{EventBus, EventReceiver},
 };
 
+mod wasm_runtime;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExtensionManifest {
     pub name: String,
@@ -20,7 +22,7 @@ pub struct ExtensionManifest {
     pub dependencies: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Permission {
     FileSystem,
     Network,
@@ -32,7 +34,6 @@ pub enum Permission {
 pub trait Extension: Send + Sync {
     fn manifest(&self) -> &ExtensionManifest;
     async fn initialize(&mut self, context: ExtensionContext) -> anyhow::Result<()>;
-    async fn shutdown(&mut self) -> anyhow::Result<()>;
 }
 
 pub struct ExtensionContext {
