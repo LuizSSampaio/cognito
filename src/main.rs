@@ -1,10 +1,11 @@
+mod screen;
 mod widget;
 
 use core::{Core, events::AppEvent};
 
 use iced::widget::{Column, column};
 use log::error;
-use widget::search::search_bar;
+use widget::search_bar::search_bar;
 
 fn main() -> iced::Result {
     iced::application("Cognito", Cognito::update, Cognito::view)
