@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
-use crate::{AppContext, state::SearchResult};
+use crate::{AppContext, state::Item};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub struct Action {
@@ -36,7 +36,7 @@ pub trait CommandHandler: Send + Sync {
 #[derive(Debug, Clone, PartialEq)]
 pub enum CommandResult {
     Success,
-    ShowResults(Vec<SearchResult>),
+    ShowResults(Vec<Item>),
     ShowNotification(String),
     Error(String),
 }

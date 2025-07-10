@@ -75,7 +75,7 @@ impl Core {
                     .state
                     .write()
                     .map_err(|_| anyhow::anyhow!("Failed to acquire write lock on state"))?;
-                if state.selected_index < state.results.len().saturating_sub(1) {
+                if state.selected_index < state.items.len().saturating_sub(1) {
                     state.selected_index += 1;
                 }
             }

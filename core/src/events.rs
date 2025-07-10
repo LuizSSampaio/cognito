@@ -1,13 +1,13 @@
 use tokio::sync::broadcast;
 use uuid::Uuid;
 
-use crate::{commands::Action, state::SearchResult};
+use crate::{commands::Action, state::Item};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum AppEvent {
     // Core events
     QueryChanged(String),
-    ResultsUpdated(Vec<SearchResult>),
+    ResultsUpdated(Vec<Item>),
     ItemSelected(Uuid),
     ItemActivated(Uuid, Action),
 

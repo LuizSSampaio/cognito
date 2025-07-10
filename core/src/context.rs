@@ -41,7 +41,7 @@ impl AppContext {
                 .state
                 .write()
                 .map_err(|_| anyhow::anyhow!("Failed to acquire write lock on state"))?;
-            state.results = Vec::new();
+            state.items = Vec::new();
             state.selected_index = 0;
         }
 
@@ -59,7 +59,7 @@ impl AppContext {
                 .map_err(|_| anyhow::anyhow!("Failed to acquire read lock on state"))?;
 
             let result = state
-                .results
+                .items
                 .get(state.selected_index)
                 .ok_or_else(|| anyhow::anyhow!("No item selected"))?;
             let action = result

@@ -5,7 +5,7 @@ use crate::commands::Action;
 #[derive(Debug, Clone, PartialEq)]
 pub struct AppState {
     pub query: String,
-    pub results: Vec<SearchResult>,
+    pub items: Vec<Item>,
     pub selected_index: usize,
     pub mode: AppMode,
 }
@@ -17,7 +17,7 @@ pub enum AppMode {
 }
 
 #[derive(Debug, Clone, PartialEq, Hash)]
-pub struct SearchResult {
+pub struct Item {
     pub id: Uuid,
     pub title: String,
     pub subtitle: Option<String>,
@@ -30,7 +30,7 @@ impl Default for AppState {
     fn default() -> Self {
         Self {
             query: Default::default(),
-            results: Default::default(),
+            items: Default::default(),
             selected_index: Default::default(),
             mode: AppMode::Search,
         }
