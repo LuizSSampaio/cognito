@@ -3,9 +3,9 @@ mod widget;
 
 use core::{Core, events::AppEvent};
 
-use iced::widget::{Column, column};
+use iced::Element;
 use log::error;
-use widget::search_bar::search_bar;
+use screen::{Screen, search::Search};
 
 fn main() -> iced::Result {
     iced::application("Cognito", Cognito::update, Cognito::view)
@@ -19,25 +19,39 @@ fn main() -> iced::Result {
 
 struct Cognito {
     core: Core,
+    screen: Screen,
 }
 
 impl Default for Cognito {
     fn default() -> Self {
         let core = core::Core::new().unwrap();
-        Self { core }
+        let screen = Screen::Search(Search::default());
+        Self { core, screen }
     }
 }
 
 impl Cognito {
     pub fn update(&mut self, message: core::events::AppEvent) {
-        if let AppEvent::QueryChanged(new) = message {
-            if let Err(e) = self.core.context().handle_query(new) {
-                error!("Query handle failed: {e}");
-            }
+        match message {
+            core::events::AppEvent::QueryChanged(query) => match &mut self.screen {
+                Screen::Search(search) => {
+                    if let Err(e) = self.core.context().handle_query(query) {
+                        error!("Query handle failed: {e}");
+                    }
+
+                    search.query = self.core.context().get_query();
+                }
+            },
+            core::events::AppEvent::ResultsUpdated(items) => match &mut self.screen {
+                Screen::Search(search) => search.items = items,
+            },
+            _ => {}
         }
     }
 
-    pub fn view(&self) -> Column<core::events::AppEvent> {
-        column![search_bar(self.core.context().get_query(), None)]
+    pub fn view(&self) -> Element<'_, AppEvent> {
+        match &self.screen {
+            Screen::Search(search) => search.view(),
+        }
     }
 }

@@ -6,7 +6,7 @@ mod config;
 mod context;
 pub mod events;
 mod extensions;
-mod state;
+pub mod state;
 
 #[derive(Clone)]
 pub struct Core {
