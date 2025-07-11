@@ -7,7 +7,6 @@ use crate::{AppContext, state::Item};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub struct Action {
-    pub id: String,
     pub title: String,
     pub description: Option<String>,
     pub icon: Option<String>,

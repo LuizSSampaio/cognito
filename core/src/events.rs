@@ -1,24 +1,16 @@
 use tokio::sync::broadcast;
 use uuid::Uuid;
 
-use crate::{commands::Action, state::Item};
+use crate::state::Item;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum AppEvent {
     // Core events
     QueryChanged(String),
     ResultsUpdated(Vec<Item>),
-    ItemSelected(Uuid),
-    ItemActivated(Uuid, Action),
-
-    // Navigation Events
-    MoveUp,
-    MoveDown,
-    PageUp,
-    PageDown,
+    ItemActivated(Uuid, usize),
 
     // Mode Events
-    EnterCommandMode,
     ExitToSearch,
 
     // System Events

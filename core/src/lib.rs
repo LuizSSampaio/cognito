@@ -61,24 +61,6 @@ impl Core {
             AppEvent::QueryChanged(query) => {
                 context.handle_query(query)?;
             }
-            AppEvent::MoveUp => {
-                let mut state = context
-                    .state
-                    .write()
-                    .map_err(|_| anyhow::anyhow!("Failed to acquire write lock on state"))?;
-                if state.selected_index > 0 {
-                    state.selected_index -= 1;
-                }
-            }
-            AppEvent::MoveDown => {
-                let mut state = context
-                    .state
-                    .write()
-                    .map_err(|_| anyhow::anyhow!("Failed to acquire write lock on state"))?;
-                if state.selected_index < state.items.len().saturating_sub(1) {
-                    state.selected_index += 1;
-                }
-            }
             _ => {}
         }
 

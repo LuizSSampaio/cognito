@@ -42,44 +42,10 @@ impl AppContext {
                 .write()
                 .map_err(|_| anyhow::anyhow!("Failed to acquire write lock on state"))?;
             state.items = Vec::new();
-            state.selected_index = 0;
         }
 
         self.event_bus
             .publish(crate::events::AppEvent::QueryChanged(query))?;
-
-        Ok(())
-    }
-
-    pub async fn active_selected(&self) -> anyhow::Result<()> {
-        let (result_id, action) = {
-            let state = self
-                .state
-                .read()
-                .map_err(|_| anyhow::anyhow!("Failed to acquire read lock on state"))?;
-
-            let result = state
-                .items
-                .get(state.selected_index)
-                .ok_or_else(|| anyhow::anyhow!("No item selected"))?;
-            let action = result
-                .actions
-                .first()
-                .ok_or_else(|| anyhow::anyhow!("No action available"))?;
-
-            (result.id, action.clone())
-        };
-
-        let command_registry = self
-            .command_registry
-            .read()
-            .map_err(|_| anyhow::anyhow!("Failed to acquire read lock on state"))?;
-        command_registry
-            .execute(action.command_type.to_owned(), self)
-            .await?;
-
-        self.event_bus
-            .publish(crate::events::AppEvent::ItemActivated(result_id, action))?;
 
         Ok(())
     }
