@@ -10,7 +10,10 @@ use wasmtime_wasi::{
     p2::{IoView, WasiCtxBuilder, WasiView},
 };
 
-use super::{Extension, ExtensionApi, ExtensionManifest};
+use super::{
+    ExtensionManifest,
+    extension::{Extension, ExtensionApi, ExtensionContext},
+};
 
 pub struct WasmExtension {
     manifest: ExtensionManifest,
@@ -94,7 +97,7 @@ impl Extension for WasmExtension {
         &self.manifest
     }
 
-    async fn initialize(&mut self, context: super::ExtensionContext) -> anyhow::Result<()> {
+    async fn initialize(&mut self, context: ExtensionContext) -> anyhow::Result<()> {
         let mut store = self.create_store(context.api.clone());
         let linker = self.create_linker()?;
 
