@@ -1,21 +1,23 @@
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use uuid::Uuid;
 
-use crate::events::{EventBus, EventReceiver};
+use crate::events::{AppEvent, EventBus, EventReceiver};
 
 use super::ExtensionManifest;
 
 #[async_trait]
 pub trait Extension: Send + Sync {
+    fn load(path: &str) -> anyhow::Result<Self>
+    where
+        Self: Sized;
+    fn publish_event(&self, event: AppEvent) -> anyhow::Result<()>;
     fn manifest(&self) -> &ExtensionManifest;
     async fn initialize(&mut self, context: ExtensionContext) -> anyhow::Result<()>;
 }
 
 #[derive(Debug, Clone)]
 pub struct ExtensionContext {
-    id: Uuid,
     pub api: Arc<ExtensionApi>,
 }
 

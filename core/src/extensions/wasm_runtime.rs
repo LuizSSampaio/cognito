@@ -10,6 +10,8 @@ use wasmtime_wasi::{
     p2::{IoView, WasiCtxBuilder, WasiView},
 };
 
+use crate::events::AppEvent;
+
 use super::{
     ExtensionManifest,
     extension::{Extension, ExtensionApi, ExtensionContext},
@@ -93,6 +95,14 @@ impl WasmExtension {
 
 #[async_trait]
 impl Extension for WasmExtension {
+    fn load(path: &str) -> anyhow::Result<Self> {
+        todo!()
+    }
+
+    fn publish_event(&self, event: AppEvent) -> anyhow::Result<()> {
+        todo!()
+    }
+
     fn manifest(&self) -> &ExtensionManifest {
         &self.manifest
     }
