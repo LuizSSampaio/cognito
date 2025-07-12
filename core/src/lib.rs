@@ -57,12 +57,15 @@ impl Core {
     }
 
     fn handle_event(context: &AppContext, event: AppEvent) -> anyhow::Result<()> {
-        match event {
-            AppEvent::QueryChanged(query) => {
-                context.handle_query(query)?;
-            }
-            _ => {}
+        if let AppEvent::QueryChanged(query) = event.clone() {
+            context.handle_query(query)?;
         }
+
+        context
+            .extension_manager
+            .read()
+            .map_err(|_| anyhow::anyhow!("Failed to acquire write lock on state"))?
+            .handle_event(event)?;
 
         Ok(())
     }

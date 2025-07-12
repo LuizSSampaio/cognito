@@ -1,12 +1,16 @@
 use std::sync::{Arc, RwLock};
 
-use crate::{commands::CommandRegistry, config::ConfigManager, events::EventBus, state::AppState};
+use crate::{
+    commands::CommandRegistry, config::ConfigManager, events::EventBus,
+    extensions::ExtensionManager, state::AppState,
+};
 
 #[derive(Clone)]
 pub struct AppContext {
     pub state: Arc<RwLock<AppState>>,
     pub event_bus: EventBus,
     pub config: Arc<RwLock<ConfigManager>>,
+    pub extension_manager: Arc<RwLock<ExtensionManager>>,
     pub command_registry: Arc<RwLock<CommandRegistry>>,
 }
 
@@ -16,6 +20,7 @@ impl AppContext {
             state: Arc::new(RwLock::new(AppState::default())),
             event_bus: EventBus::new(),
             config: Arc::new(RwLock::new(ConfigManager::new()?)),
+            extension_manager: Arc::new(RwLock::new(ExtensionManager::default())),
             command_registry: Arc::new(RwLock::new(CommandRegistry::default())),
         })
     }
@@ -43,9 +48,6 @@ impl AppContext {
                 .map_err(|_| anyhow::anyhow!("Failed to acquire write lock on state"))?;
             state.items = Vec::new();
         }
-
-        self.event_bus
-            .publish(crate::events::AppEvent::QueryChanged(query))?;
 
         Ok(())
     }
