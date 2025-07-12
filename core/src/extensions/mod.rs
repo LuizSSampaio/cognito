@@ -27,21 +27,21 @@ pub enum Permission {
     Clipboard,
 }
 
+#[derive(Default)]
 pub struct ExtensionManager {
     extensions: HashMap<Uuid, Box<dyn Extension>>,
 }
 
 impl ExtensionManager {
-    pub fn new() -> Self {
-        todo!()
-    }
-
     pub fn load_extension(&mut self, path: &str) -> anyhow::Result<Uuid> {
         todo!()
     }
 
     pub fn unload_extension(&mut self, id: Uuid) -> anyhow::Result<()> {
-        todo!()
+        match self.extensions.remove(&id) {
+            Some(_) => Ok(()),
+            None => anyhow::bail!("Couldn't find an extension with ID: {}", id),
+        }
     }
 
     pub fn handle_event(&self, event: AppEvent) -> anyhow::Result<()> {
@@ -53,14 +53,23 @@ impl ExtensionManager {
 
                 Ok(())
             }
-            AppEvent::ItemActivated(uuid, _) => todo!(),
+            AppEvent::ItemActivated(uuid, index) => {
+                for extension in self.extensions.values() {
+                    if extension.get_items_ids()?.contains(&uuid) {
+                        extension.publish_event(AppEvent::ItemActivated(uuid, index))?;
+                        break;
+                    }
+                }
+
+                Ok(())
+            }
             _ => Ok(()),
         }
     }
 
-    pub fn get_manifest(&self, id: Uuid) -> Option<ExtensionManifest> {
+    pub fn get_manifest(&self, id: Uuid) -> Option<&ExtensionManifest> {
         if let Some(extension) = self.extensions.get(&id) {
-            return Some(extension.manifest().clone());
+            return Some(extension.manifest());
         }
 
         None

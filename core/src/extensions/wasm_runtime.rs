@@ -1,6 +1,7 @@
-use std::{path::Path, sync::Arc};
+use std::{collections::HashSet, path::Path, sync::Arc};
 
 use async_trait::async_trait;
+use uuid::Uuid;
 use wasmtime::{
     Engine, Store,
     component::{Component, Linker},
@@ -14,13 +15,14 @@ use crate::events::AppEvent;
 
 use super::{
     ExtensionManifest,
-    extension::{Extension, ExtensionApi, ExtensionContext},
+    extension::{Extension, ExtensionApi},
 };
 
 pub struct WasmExtension {
     manifest: ExtensionManifest,
     engine: Engine,
     component: Component,
+    extension_api: Option<Arc<ExtensionApi>>,
 }
 
 struct ExtensionState {
@@ -50,7 +52,16 @@ impl WasmExtension {
             manifest,
             engine,
             component,
+            extension_api: None,
         })
+    }
+
+    fn get_extension_api(&self) -> anyhow::Result<&Arc<ExtensionApi>> {
+        if let Some(api) = &self.extension_api {
+            return Ok(api);
+        }
+
+        anyhow::bail!("Extension not initialized")
     }
 
     fn create_store(&self, api: Arc<ExtensionApi>) -> Store<ExtensionState> {
@@ -95,20 +106,24 @@ impl WasmExtension {
 
 #[async_trait]
 impl Extension for WasmExtension {
-    fn load(path: &str) -> anyhow::Result<Self> {
-        todo!()
+    fn publish_event(&self, event: AppEvent) -> anyhow::Result<()> {
+        self.get_extension_api()?.event_bus.publish(event)?;
+
+        Ok(())
     }
 
-    fn publish_event(&self, event: AppEvent) -> anyhow::Result<()> {
-        todo!()
+    fn get_items_ids(&self) -> anyhow::Result<&HashSet<Uuid>> {
+        Ok(&self.get_extension_api()?.item_ids)
     }
 
     fn manifest(&self) -> &ExtensionManifest {
         &self.manifest
     }
 
-    async fn initialize(&mut self, context: ExtensionContext) -> anyhow::Result<()> {
-        let mut store = self.create_store(context.api.clone());
+    async fn initialize(&mut self) -> anyhow::Result<()> {
+        self.extension_api = Some(Arc::new(ExtensionApi::default()));
+
+        let mut store = self.create_store(self.get_extension_api()?.to_owned());
         let linker = self.create_linker()?;
 
         let instance = linker.instantiate(&mut store, &self.component)?;
