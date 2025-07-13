@@ -120,7 +120,7 @@ impl Extension for WasmExtension {
         &self.manifest
     }
 
-    async fn initialize(&mut self) -> anyhow::Result<()> {
+    fn initialize(&mut self) -> anyhow::Result<()> {
         self.extension_api = Some(Arc::new(ExtensionApi::default()));
 
         let mut store = self.create_store(self.get_extension_api()?.to_owned());

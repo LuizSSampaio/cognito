@@ -12,7 +12,7 @@ pub trait Extension: Send + Sync {
     fn publish_event(&self, event: AppEvent) -> anyhow::Result<()>;
     fn get_items_ids(&self) -> anyhow::Result<&HashSet<Uuid>>;
     fn manifest(&self) -> &ExtensionManifest;
-    async fn initialize(&mut self) -> anyhow::Result<()>;
+    fn initialize(&mut self) -> anyhow::Result<()>;
 }
 
 #[derive(Debug, Clone)]
