@@ -32,6 +32,22 @@ impl Default for ExtensionApi {
 
 impl ExtensionApi {
     pub fn subscribe_event(&self) -> EventReceiver {
+        self.event_bus.subscribe()
+    }
+
+    pub fn add_item(&mut self) -> Uuid {
         todo!()
+    }
+
+    pub fn remove_item(&mut self, id: Uuid) -> anyhow::Result<()> {
+        if self.item_ids.remove(&id) {
+            return Ok(());
+        }
+
+        anyhow::bail!("Couldn't find an item with ID: {}", id)
+    }
+
+    pub fn get_items(&self) -> HashSet<Uuid> {
+        self.item_ids.clone()
     }
 }
