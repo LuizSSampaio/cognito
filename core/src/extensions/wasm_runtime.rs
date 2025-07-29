@@ -1,7 +1,6 @@
-use std::{collections::HashSet, path::Path, sync::Arc};
+use std::{path::Path, sync::Arc};
 
 use async_trait::async_trait;
-use uuid::Uuid;
 use wasmtime::{
     Engine, Store,
     component::{Component, Linker},
@@ -110,10 +109,6 @@ impl Extension for WasmExtension {
         self.get_extension_api()?.event_bus.publish(event)?;
 
         Ok(())
-    }
-
-    fn get_items_ids(&self) -> anyhow::Result<&HashSet<Uuid>> {
-        Ok(&self.get_extension_api()?.item_ids)
     }
 
     fn manifest(&self) -> &ExtensionManifest {

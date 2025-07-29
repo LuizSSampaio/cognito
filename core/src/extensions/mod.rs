@@ -86,10 +86,7 @@ impl ExtensionManager {
             }
             AppEvent::ItemActivated(uuid, index) => {
                 for extension in self.extensions.values() {
-                    if extension.get_items_ids()?.contains(&uuid) {
-                        extension.publish_event(AppEvent::ItemActivated(uuid, index))?;
-                        break;
-                    }
+                    extension.publish_event(AppEvent::ItemActivated(uuid, index))?;
                 }
 
                 Ok(())
