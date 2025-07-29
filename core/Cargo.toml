@@ -10,6 +10,6 @@ serde.workspace = true
 tokio.workspace = true
 async-trait = "0.1.88"
 dirs = "6.0.0"
-toml = "0.8.23"
-wasmtime = "34.0.1"
-wasmtime-wasi = "=34.0.1"
+toml = "0.9.3"
+wasmtime = "35.0.0"
+wasmtime-wasi = "=35.0.0"
