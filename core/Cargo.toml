@@ -11,5 +11,3 @@ tokio.workspace = true
 async-trait = "0.1.88"
 dirs = "6.0.0"
 toml = "0.9.3"
-wasmtime = "35.0.0"
-wasmtime-wasi = "=35.0.0"
