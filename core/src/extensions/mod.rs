@@ -3,8 +3,12 @@ use std::{collections::HashMap, path::PathBuf};
 use extension::Extension;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use anyhow::Result;
 
 mod extension;
+mod wasm_extension;
+
+use wasm_extension::WasmExtension;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExtensionManifest {
@@ -24,19 +28,31 @@ pub enum Permission {
     Clipboard,
 }
 
-#[derive(Default)]
 pub struct ExtensionManager {
     extensions: HashMap<Uuid, Box<dyn Extension>>,
 }
 
 impl ExtensionManager {
-    pub fn load_extension(&mut self, path: PathBuf) -> anyhow::Result<Uuid> {
+    pub fn new() -> Result<Self> {
+        Ok(Self {
+            extensions: HashMap::new(),
+        })
+    }
+    
+    pub async fn load_extension(&mut self, path: PathBuf) -> anyhow::Result<Uuid> {
         let manifest: ExtensionManifest = {
             let content = std::fs::read_to_string(path.clone().join("manifest.toml"))?;
             toml::from_str(&content)?
         };
 
         let id = Uuid::new_v4();
+        
+        // Create and initialize the WASM extension
+        let mut wasm_extension = WasmExtension::new(id, manifest, path);
+        wasm_extension.initialize().await?;
+        
+        self.extensions.insert(id, Box::new(wasm_extension));
+        
         Ok(id)
     }
 

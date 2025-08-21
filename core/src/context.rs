@@ -20,7 +20,7 @@ impl AppContext {
             state: Arc::new(RwLock::new(AppState::default())),
             event_bus: EventBus::new(),
             config: Arc::new(RwLock::new(ConfigManager::new()?)),
-            extension_manager: Arc::new(RwLock::new(ExtensionManager::default())),
+            extension_manager: Arc::new(RwLock::new(ExtensionManager::new()?)),
             command_registry: Arc::new(RwLock::new(CommandRegistry::default())),
         })
     }
